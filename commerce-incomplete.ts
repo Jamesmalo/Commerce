@@ -3,6 +3,7 @@ class Bank{
     accountName: string[];
     total: number[];
     accountPin: string[];
+    
 
     constructor(accountID: string[], accountName: string[], total: number[], accountPin: string[]){
         this.accountID = accountID;
@@ -12,7 +13,7 @@ class Bank{
     }
     //Instance Methods
     deposit(t:Transaction): void {
-        if(this.verifyAccount() == true){
+        if(this.verifyAccount(t) == true){
             let x = this.accountID.indexOf(t.to) 
             let y = this.accountID.indexOf(t.from)
             this.total[x] += t.amount;
@@ -20,25 +21,23 @@ class Bank{
         }
     }
     withdraw(t:Transaction): number {
-        if(this.verifyAccess() == true){
+        if(this.verifyAccess(t) == true){
             let x = this.accountID.indexOf(t.to)
             let y = this.accountID.indexOf(t.from)
             this.total[x] += t.amount;
             return this.total[y] -= t.amount;
         }
     }
-    //Static Methods
-    verifyAccount(): boolean {
+    //Methods
+    verifyAccount(t:Transaction): boolean {
         for(let i=0;i<this.accountID.length;i++){
             if(this.accountID[i] == t.to){
                 return true;
             }
-            else{
-                return false;
-            }
         }
+        return false;
     }
-    verifyAccess(): boolean {
+    verifyAccess(t:Transaction): boolean {
        for(let i=0;i<this.accountID.length;i++){
         if(this.accountID[i] == t.to && this.accountPin[i] == t.pin){
             let indexOf = i;
@@ -50,36 +49,6 @@ class Bank{
        } 
     }
 }//end of Bank class
-
-
-class Customer{
-    accountName: string;
-    total: number;
-    accountID: string;
-    accountPin: string;
-
-    constructor(name: string, total: number, accountID: string, accountPin: string){
-        this.accountName = name;
-        this.total = total;
-        this.accountID = accountID;
-        this.accountPin = accountPin;
-    }
-
-    issueTransaction(to: string, amount: number): Transaction{
-            let typeoftrans: string;
-            if(amount <= 0){
-                let typeoftrans = "withdraw";
-            }
-            else{
-                let typeoftrans = "deposit";
-            }
-
-        return new Transaction(this.accountName,this.accountPin,to,typeoftrans,amount);
-    }
-
-}//end of Customer class
-
-
 
 
 class Transaction{
@@ -98,27 +67,26 @@ class Transaction{
     }
 
 
-
-}//end of Transaction class
+} //end of Transaction class
 
 
 //creating the tests
 function main () : void{
 
 //Create some customers
-let charliedata = ["Charlie",500,"Bell","1111"];
+let charliedata = ["Charlie",500,"1111222233334444","1111"];
 const Charlie = new Customer(...charliedata);
 
-let dilliondata = [,,,];
+let dilliondata = ["Dillion",100,"5555666677778888","2222"];
 const Dillion = new Customer(...dilliondata);
 
-let delanodata = [,,,];
+let delanodata = ["Delano",300,"9999111122223333","3333"];
 const Delano = new Customer(...delanodata);
 
-let jamesdata = [,,,];
+let jamesdata = ["James",700,"4444555566667777","4444"];
 const James = new Customer(...jamesdata);
 
-let kewendata = [,,,];
+let kewendata = ["Kewen",900,"8888999911112222","5555"];
 const Kewen = new Customer(...kewendata);
 
 
@@ -160,15 +128,5 @@ main();
 
 
 
-class ATM{
 
 
-}//end of ATM class
-
-
-
-
-class DebitCard{
-
-
-}//end of Debit Card class
